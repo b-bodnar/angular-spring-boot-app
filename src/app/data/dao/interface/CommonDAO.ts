@@ -12,5 +12,5 @@ export interface CommonDAO<T> {
 
   update(T): Observable<T>;
 
-  getAll(): Observable<T>[];
+  getAll(): Observable<T[]>;
 }
