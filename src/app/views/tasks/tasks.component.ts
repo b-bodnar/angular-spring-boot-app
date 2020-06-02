@@ -20,7 +20,6 @@ export class TasksComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator, {static: false}) private paginator: MatPaginator;
   @ViewChild(MatSort, {static: false}) private sort: MatSort;
 
-
   tasks: Task[];
 
   constructor(private dataHandler: DataHandlerService) {
@@ -31,17 +30,13 @@ export class TasksComponent implements OnInit, AfterViewInit {
 
     // датасорс обязательно нужно создавать для таблицы, в него присваивается любой источник (БД, массивы, JSON и пр.)
     this.dataSource = new MatTableDataSource();
-
     this.refreshTable();
   }
 
   // в этом методе уже все проинциализировано, поэтому можно присваивать объекты (иначе может быть ошибка undefined)
   ngAfterViewInit(): void {
-
     this.addTableObjects();
-
   }
-
 
   toggleTaskCompleted(task: Task) {
     task.completed = !task.completed;
@@ -58,16 +53,12 @@ export class TasksComponent implements OnInit, AfterViewInit {
     if (task.priority && task.priority.color) {
       return task.priority.color;
     }
-
     return '#fff'; // TODO вынести цвета в константы (magic strings, magic numbers)
-
   }
 
   // показывает задачи с применением всех текущий условий (категория, поиск, фильтры и пр.)
   refreshTable() {
-
     this.dataSource.data = this.tasks; // обновить источник данных (т.к. данные массива tasks обновились)
-
     this.addTableObjects();
 
 
@@ -87,13 +78,11 @@ export class TasksComponent implements OnInit, AfterViewInit {
         case 'date': {
           return task.date ? task.date : null;
         }
-
         case 'title': {
           return task.title;
         }
       }
     };
-
   }
 
   addTableObjects() {
