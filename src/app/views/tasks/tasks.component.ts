@@ -4,6 +4,8 @@ import {Task} from 'src/app/model/Task';
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
+import {EditTaskDialogComponent} from "../../dialog/edit-task-dialog/edit-task-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-tasks',
@@ -29,7 +31,11 @@ export class TasksComponent implements OnInit {
   @Output()
   updateTask = new EventEmitter<Task>();
 
-  constructor(private dataHandler: DataHandlerService) {
+  constructor(
+    private dataHandler: DataHandlerService,
+    private dialog: MatDialog,
+  ) {
+
   }
 
   ngOnInit() {
@@ -41,7 +47,7 @@ export class TasksComponent implements OnInit {
     task.completed = !task.completed;
   }
 
-  getPriorityColor(task: Task) {
+  getPriorityColor(task: Task): string {
 
     if (task.completed) {
       return '#F8F9FA'; // TODO вынести цвета в константы (magic strings, magic numbers)
@@ -88,5 +94,15 @@ export class TasksComponent implements OnInit {
 
   onClickTask(task: Task) {
     this.updateTask.emit(task);
+  }
+
+  openEditTaskDialog(task: Task): void {
+    const dialogRef = this.dialog.open(EditTaskDialogComponent, {
+      data: [task, 'Редагування завдання'],
+      autoFocus: false
+    });
+    dialogRef.afterClosed().subscribe(result =>{
+
+    });
   }
 }
