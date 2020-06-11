@@ -3,27 +3,57 @@
 <mat-dialog-content>
   <p mat-dialog-title>{{dialogTitle}}</p>
 
+
   <!--название задачи    -->
   <mat-form-field>
 
     <mat-label>Название (обязательно)</mat-label>
     <input
       #inputTitle
-      (keydown.enter)="onConfirm()"
+      matInput
 
       [(ngModel)]="tmpTitle"
 
-      matInput> <!-- по нажатию на enter можем сразу сохранить задачу -->
+      (keydown.enter)="onConfirm()"> <!-- по нажатию на enter можем сразу сохранить задачу -->
 
     <button
-      (click)="tmpTitle= ''"
+      *ngIf="tmpTitle.trim().length > 0"
 
-      *ngIf="tmpTitle.trim().length > 0" aria-label="Clear" class="size25" mat-button
+      mat-button matSuffix mat-icon-button aria-label="Clear"
 
-      mat-icon-button matSuffix>
+      (click)="tmpTitle= ''" class="size25">
 
       <mat-icon>clear</mat-icon>
     </button>
+
+  </mat-form-field>
+
+
+  <!--    выпадающий список категорий-->
+  <mat-form-field>
+    <mat-label>Укажите категорию</mat-label>
+
+    <mat-select [(ngModel)]="tmpCategory">
+      <mat-option [value]="null">Без категории</mat-option>
+      <mat-option *ngFor="let cat of categories" [value]="cat">
+        {{cat.title}}
+      </mat-option>
+    </mat-select>
+
+  </mat-form-field>
+
+  <!--    выпадающий список приоритетов-->
+  <mat-form-field>
+    <mat-label>Укажите приоритет</mat-label>
+
+    <mat-select [(ngModel)]="tmpPriority">
+      <mat-option [value]="null">Без приоритета</mat-option>
+
+      <mat-option *ngFor="let p of priorities" [value]="p">
+        {{p.title}}
+      </mat-option>
+    </mat-select>
+
 
   </mat-form-field>
 
@@ -34,16 +64,27 @@
 <!--  кнопки возможных действий-->
 <mat-dialog-actions>
 
-  <button
-    (click)="onConfirm()" [disabled]="inputTitle.value.trim().length==0"
-    color="primary"
-    mat-raised-button>  <!-- если пустой текст - кнопка "Сохранить" будет недоступна -->
-    Сохранить
-  </button>
+
+  <div class="col-md-5 col-12">
+
+    <button
+      mat-raised-button color="primary"
+      (click)="onConfirm()"
+      [disabled]="inputTitle.value.trim().length==0">
+      <!-- если пустой текст - кнопка "Сохранить" будет недоступна -->
+      Сохранить
+    </button>
 
 
-  <button (click)="onCancel()" mat-raised-button>Отмена</button>
+    <button mat-raised-button (click)="onCancel()">Отмена</button>
+
+  </div>
+
 
 
 </mat-dialog-actions>
+
+
+
+
 
