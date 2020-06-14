@@ -8,22 +8,33 @@ import {Category} from "./model/Category";
   templateUrl: 'app.component.html',
   styleUrls: []
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   title = 'Todo';
   tasks: Task[];
   categories: Category[];
-  selectedCategory: Category;
 
-  constructor(private dataHandler: DataHandlerService) {
+  selectedCategory: Category = null;
+
+
+  constructor(
+    private dataHandler: DataHandlerService, // фасад для работы с данными
+  ) {
   }
 
   ngOnInit(): void {
-    this.dataHandler.getAllTasks().subscribe(tasks => this.tasks = tasks);
+    // this.dataHandler.getAllTasks().subscribe(tasks => this.tasks = tasks);
     this.dataHandler.getAllCategories().subscribe(categories => this.categories = categories);
+
+    this.onSelectCategory(null); // показать все задачи
+
   }
 
+
+  // изменение категории
   onSelectCategory(category: Category) {
+
     this.selectedCategory = category;
+
     this.dataHandler.searchTasks(
       this.selectedCategory,
       null,
@@ -32,9 +43,12 @@ export class AppComponent implements OnInit{
     ).subscribe(tasks => {
       this.tasks = tasks;
     });
+
   }
 
+  // обновление задачи
   onUpdateTask(task: Task) {
+
     this.dataHandler.updateTask(task).subscribe(() => {
       this.dataHandler.searchTasks(
         this.selectedCategory,
@@ -45,9 +59,12 @@ export class AppComponent implements OnInit{
         this.tasks = tasks;
       });
     });
+
   }
 
+  // удаление задачи
   onDeleteTask(task: Task) {
+
     this.dataHandler.deleteTask(task.id).subscribe(() => {
       this.dataHandler.searchTasks(
         this.selectedCategory,
@@ -58,5 +75,7 @@ export class AppComponent implements OnInit{
         this.tasks = tasks;
       });
     });
+
+
   }
 }
