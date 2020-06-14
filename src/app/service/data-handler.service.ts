@@ -13,9 +13,12 @@ import {PriorityDAOArray} from "../data/dao/impl/PriorityDAOArray";
 })
 export class DataHandlerService {
 
+  // релизации работы с данными с помощью массива
+  // (можно подставлять любые релизации, в том числе с БД. Главное - соблюдать интерфейсы)
   private taskDaoArray = new TaskDAOArray();
-  private categoryDAOArray = new CategoryDAOArray();
-  private priorityDAOArray = new PriorityDAOArray();
+  private categoryDaoArray = new CategoryDAOArray();
+  private priorityDaoArray = new PriorityDAOArray();
+
 
   constructor() {
   }
@@ -25,22 +28,35 @@ export class DataHandlerService {
   }
 
   getAllCategories(): Observable<Category[]> {
-    return this.categoryDAOArray.getAll();
+    return this.categoryDaoArray.getAll();
   }
 
-  getAllPriorities() {
-    return this.priorityDAOArray.getAll();
+  getAllPriorities(): Observable<Priority[]> {
+    return this.priorityDaoArray.getAll();
   }
 
-  searchTasks(category: Category, searchText: string, status: boolean, priority: Priority): Observable<Task[]> {
-    return this.taskDaoArray.search(category, searchText, status, priority);
-  }
 
   updateTask(task: Task): Observable<Task> {
     return this.taskDaoArray.update(task);
   }
 
-  deleteTask(id: number): Observable<Task>  {
-    return this.taskDaoArray.delete(id)
+
+  // поиск задач по параметрам
+  searchTasks(category: Category, searchText: string, status: boolean, priority: Priority): Observable<Task[]> {
+    return this.taskDaoArray.search(category, searchText, status, priority);
   }
+
+  deleteTask(id: number): Observable<Task> {
+    return this.taskDaoArray.delete(id);
+  }
+
+
+  updateCategory(category: Category): Observable<Category> {
+    return this.categoryDaoArray.update(category);
+  }
+
+  deleteCategory(id: number): Observable<Category> {
+    return this.categoryDaoArray.delete(id);
+  }
+
 }

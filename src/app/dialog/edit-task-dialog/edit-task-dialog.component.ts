@@ -13,6 +13,20 @@ import {ConfirmDialogComponent} from "../confirm-dialog/confirm-dialog.component
 })
 export class EditTaskDialogComponent implements OnInit {
 
+  tmpCategory: Category;
+
+   categories: Category[];
+  priorities: Priority[];
+
+   dialogTitle: string; // заголовок окна
+   task: Task; // задача для редактирования/создания
+
+  // сохраняем все значения в отдельные переменные
+  // чтобы изменения не сказывались на самой задаче и можно было отменить изменения
+   tmpTitle: string;
+   tmpPriority: Priority;
+   tmpDate: Date;
+
   constructor(
     private dialogRef: MatDialogRef<EditTaskDialogComponent>, // // для возможности работы с текущим диалог. окном
     @Inject(MAT_DIALOG_DATA) private data: [Task, string], // данные, которые передали в диалоговое окно
@@ -20,20 +34,6 @@ export class EditTaskDialogComponent implements OnInit {
     private dialog: MatDialog // для открытия нового диалогового окна (из текущего) - например для подтверждения удаления
   ) {
   }
-
-  categories: Category[];
-  priorities: Priority[];
-
-  dialogTitle: string; // заголовок окна
-  task: Task; // задача для редактирования/создания
-
-  // сохраняем все значения в отдельные переменные
-  // чтобы изменения не сказывались на самой задаче и можно было отменить изменения
-  tmpTitle: string;
-  tmpPriority: Priority;
-  tmpCategory: Category;
-  tmpDate: Date;
-
 
   ngOnInit() {
     this.task = this.data[0]; // задача для редактирования/создания
@@ -69,12 +69,12 @@ export class EditTaskDialogComponent implements OnInit {
   }
 
   // нажали отмену (ничего не сохраняем и закрываем окно)
-  onCancel(): void {
+   onCancel(): void {
     this.dialogRef.close(null);
   }
 
   // нажали Удалить
-  delete() {
+   delete() {
 
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '500px',
@@ -93,13 +93,13 @@ export class EditTaskDialogComponent implements OnInit {
   }
 
   // нажали Выполнить (завершить) задачу
-  complete() {
+   complete() {
     this.dialogRef.close('complete');
 
   }
 
   // делаем статус задачи "незавершенным" (активируем)
-  activate() {
+   activate() {
     this.dialogRef.close('activate');
   }
 }

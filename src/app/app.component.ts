@@ -63,7 +63,7 @@ export class AppComponent implements OnInit {
   }
 
   // удаление задачи
-  onDeleteTask(task: Task) {
+ onDeleteTask(task: Task) {
 
     this.dataHandler.deleteTask(task.id).subscribe(() => {
       this.dataHandler.searchTasks(
@@ -75,7 +75,21 @@ export class AppComponent implements OnInit {
         this.tasks = tasks;
       });
     });
-
-
   }
+
+  // удаление категории
+  onDeleteCategory(category: Category) {
+    this.dataHandler.deleteCategory(category.id).subscribe(cat => {
+      this.selectedCategory = null; // открываем категорию "Все"
+      this.onSelectCategory(this.selectedCategory);
+    });
+  }
+
+  // обновлении категории
+   onUpdateCategory(category: Category) {
+    this.dataHandler.updateCategory(category).subscribe(() => {
+      this.onSelectCategory(this.selectedCategory);
+    });
+  }
+
 }
