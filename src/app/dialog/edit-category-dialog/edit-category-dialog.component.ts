@@ -15,7 +15,7 @@ export class EditCategoryDialogComponent implements OnInit {
   ) {
   }
 
-  dialogTitle: string; // текст для диалогового окна
+   dialogTitle: string; // текст для диалогового окна
   categoryTitle: string; // текст для названия категории (при реактировании или добавлении)
 
   ngOnInit() {
@@ -32,12 +32,12 @@ export class EditCategoryDialogComponent implements OnInit {
   }
 
   // нажали отмену (ничего не сохраняем и закрываем окно)
-  onCancel() {
+   onCancel() {
     this.dialogRef.close(false);
   }
 
   // нажали Удалить
-  delete() {
+   delete() {
 
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '500px',

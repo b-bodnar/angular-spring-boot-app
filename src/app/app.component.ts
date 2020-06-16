@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
   tasks: Task[];
   categories: Category[];
 
-  selectedCategory: Category = null;
+   selectedCategory: Category = null;
 
 
   constructor(
@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
 
 
   // изменение категории
-  onSelectCategory(category: Category) {
+   onSelectCategory(category: Category) {
 
     this.selectedCategory = category;
 
@@ -47,7 +47,7 @@ export class AppComponent implements OnInit {
   }
 
   // обновление задачи
-  onUpdateTask(task: Task) {
+   onUpdateTask(task: Task) {
 
     this.dataHandler.updateTask(task).subscribe(() => {
       this.dataHandler.searchTasks(
@@ -63,7 +63,7 @@ export class AppComponent implements OnInit {
   }
 
   // удаление задачи
- onDeleteTask(task: Task) {
+   onDeleteTask(task: Task) {
 
     this.dataHandler.deleteTask(task.id).subscribe(() => {
       this.dataHandler.searchTasks(
@@ -78,7 +78,7 @@ export class AppComponent implements OnInit {
   }
 
   // удаление категории
-  onDeleteCategory(category: Category) {
+   onDeleteCategory(category: Category) {
     this.dataHandler.deleteCategory(category.id).subscribe(cat => {
       this.selectedCategory = null; // открываем категорию "Все"
       this.onSelectCategory(this.selectedCategory);
@@ -91,5 +91,6 @@ export class AppComponent implements OnInit {
       this.onSelectCategory(this.selectedCategory);
     });
   }
+
 
 }
