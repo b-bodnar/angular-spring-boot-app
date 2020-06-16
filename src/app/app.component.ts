@@ -10,8 +10,8 @@ import {Priority} from "./model/Priority";
   styleUrls: []
 })
 export class AppComponent implements OnInit {
-  title = 'Todo';
-  tasks: Task[];
+   title = 'Todo';
+   tasks: Task[];
    categories: Category[]; // все категории
    priorities: Priority[]; // все приоритеты
 
@@ -45,14 +45,7 @@ export class AppComponent implements OnInit {
 
     this.selectedCategory = category;
 
-    this.dataHandler.searchTasks(
-      this.selectedCategory,
-      null,
-      null,
-      null
-    ).subscribe(tasks => {
-      this.tasks = tasks;
-    });
+    this.updateTasks();
 
   }
 
@@ -74,7 +67,9 @@ export class AppComponent implements OnInit {
   // обновление задачи
    onUpdateTask(task: Task) {
 
-    this.updateTasks();
+    this.dataHandler.updateTask(task).subscribe(cat => {
+      this.updateTasks()
+    });
 
   }
 
@@ -85,6 +80,7 @@ export class AppComponent implements OnInit {
       this.updateTasks()
     });
   }
+
 
   // поиск задач
    onSearchTasks(searchString: string) {
@@ -113,5 +109,26 @@ export class AppComponent implements OnInit {
     ).subscribe((tasks: Task[]) => {
       this.tasks = tasks;
     });
+  }
+
+
+  // добавление задачи
+   onAddTask(task: Task) {
+
+    this.dataHandler.addTask(task).subscribe(result => {
+
+      this.updateTasks();
+
+    });
+
+  }
+
+  // добавление категории
+   onAddCategory(title: string) {
+    this.dataHandler.addCategory(title).subscribe(() => this.updateCategories());
+  }
+
+   updateCategories() {
+    this.dataHandler.getAllCategories().subscribe(categories => this.categories = categories);
   }
 }

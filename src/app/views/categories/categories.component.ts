@@ -3,6 +3,7 @@ import {DataHandlerService} from "../../service/data-handler.service";
 import {Category} from "../../model/Category";
 import {EditCategoryDialogComponent} from "../../dialog/edit-category-dialog/edit-category-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
+import {OperType} from "../../dialog/OperType";
 
 @Component({
   selector: 'app-categories',
@@ -10,9 +11,12 @@ import {MatDialog} from "@angular/material/dialog";
   styleUrls: ['categories.component.css']
 })
 export class CategoriesComponent implements OnInit {
-
   @Input()
   categories: Category[];
+
+  @Input()
+  selectedCategory: Category;
+
 
   // выбрали категорию из списка
   @Output()
@@ -26,8 +30,11 @@ export class CategoriesComponent implements OnInit {
   @Output()
   updateCategory = new EventEmitter<Category>();
 
-  @Input()
-  selectedCategory: Category;
+  // добавили категорию
+  @Output()
+  addCategory = new EventEmitter<string>(); // передаем только название новой категории
+
+
 
 
   // для отображения иконки редактирования при наведении на категорию
@@ -69,7 +76,7 @@ export class CategoriesComponent implements OnInit {
   // диалоговое окно для редактирования категории
    openEditDialog(category: Category) {
     const dialogRef = this.dialog.open(EditCategoryDialogComponent, {
-      data: [category.title, 'Редактирование категории'],
+      data: [category.title, 'Редактирование категории', OperType.EDIT],
       width: '400px'
     });
 
@@ -82,7 +89,7 @@ export class CategoriesComponent implements OnInit {
         return;
       }
 
-      if (typeof (result) === 'string') { // нажали сохранить
+      if (result as string) { // нажали сохранить
         category.title = result as string;
 
         this.updateCategory.emit(category); // вызываем внешний обработчик
@@ -91,4 +98,15 @@ export class CategoriesComponent implements OnInit {
     });
   }
 
+  // диалоговое окно для добавления категории
+   openAddDialog() {
+
+    const dialogRef = this.dialog.open(EditCategoryDialogComponent, {data: ['', 'Добавление категории', OperType.ADD], width: '400px'});
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.addCategory.emit(result as string); // вызываем внешний обработчик
+      }
+    });
+  }
 }

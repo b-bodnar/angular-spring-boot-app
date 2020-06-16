@@ -119,7 +119,7 @@
   >
 
     <button
-      (click)="complete()" *ngIf="!task.completed"
+      (click)="complete()" *ngIf="!task.completed && canActivateDesactivate()"
       class="green"
       mat-button
 
@@ -128,7 +128,7 @@
     </button>
 
     <button
-      (click)="activate()" *ngIf="task.completed"
+      (click)="activate()" *ngIf="task.completed && canActivateDesactivate()"
       class="green"
       mat-button>
 
@@ -137,6 +137,8 @@
     </button>
 
     <button
+      *ngIf="canDelete()"
+
       (click)="delete()"
 
       class="red"

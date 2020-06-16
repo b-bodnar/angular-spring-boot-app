@@ -2,6 +2,10 @@
 
   <app-categories
     (selectCategory)="onSelectCategory($event)"
+    (deleteCategory)="onDeleteCategory($event)"
+    (updateCategory)="onUpdateCategory($event)"
+    (addCategory)="onAddCategory($event)"
+
 
     [selectedCategory]="selectedCategory"
     [categories]="categories"></app-categories>
@@ -89,10 +93,13 @@
               (updateTask)="onUpdateTask($event)"
               (deleteTask)="onDeleteTask($event)"
               (selectCategory)="onSelectCategory($event)"
+              (addTask)="onAddTask($event)"
 
+
+              [selectedCategory]="selectedCategory"
               (filterByTitle)="onSearchTasks($event)"
-              (filterByStatus)="onFilterTasksByStatus($event)"
               (filterByPriority)="onFilterTasksByPriority($event)"
+              (filterByStatus)="onFilterTasksByStatus($event)"
 
               [tasks]="tasks"
               [priorities]="priorities"
