@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {DataHandlerService} from "./service/data-handler.service";
 import {Task} from "./model/Task";
 import {Category} from "./model/Category";
+import {Priority} from "./model/Priority";
 
 @Component({
   selector: 'app-root',
@@ -11,9 +12,18 @@ import {Category} from "./model/Category";
 export class AppComponent implements OnInit {
   title = 'Todo';
   tasks: Task[];
-  categories: Category[];
+   categories: Category[]; // все категории
+   priorities: Priority[]; // все приоритеты
+
 
    selectedCategory: Category = null;
+
+  // поиск
+   searchTaskText = ''; // текущее значение для поиска задач
+
+  // фильтрация
+   priorityFilter: Priority;
+   statusFilter: boolean;
 
 
   constructor(
@@ -22,7 +32,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.dataHandler.getAllTasks().subscribe(tasks => this.tasks = tasks);
+    this.dataHandler.getAllPriorities().subscribe(priorities => this.priorities = priorities);
     this.dataHandler.getAllCategories().subscribe(categories => this.categories = categories);
 
     this.onSelectCategory(null); // показать все задачи
@@ -46,37 +56,6 @@ export class AppComponent implements OnInit {
 
   }
 
-  // обновление задачи
-   onUpdateTask(task: Task) {
-
-    this.dataHandler.updateTask(task).subscribe(() => {
-      this.dataHandler.searchTasks(
-        this.selectedCategory,
-        null,
-        null,
-        null
-      ).subscribe(tasks => {
-        this.tasks = tasks;
-      });
-    });
-
-  }
-
-  // удаление задачи
-   onDeleteTask(task: Task) {
-
-    this.dataHandler.deleteTask(task.id).subscribe(() => {
-      this.dataHandler.searchTasks(
-        this.selectedCategory,
-        null,
-        null,
-        null
-      ).subscribe(tasks => {
-        this.tasks = tasks;
-      });
-    });
-  }
-
   // удаление категории
    onDeleteCategory(category: Category) {
     this.dataHandler.deleteCategory(category.id).subscribe(cat => {
@@ -92,5 +71,47 @@ export class AppComponent implements OnInit {
     });
   }
 
+  // обновление задачи
+   onUpdateTask(task: Task) {
 
+    this.updateTasks();
+
+  }
+
+  // удаление задачи
+   onDeleteTask(task: Task) {
+
+    this.dataHandler.deleteTask(task.id).subscribe(cat => {
+      this.updateTasks()
+    });
+  }
+
+  // поиск задач
+   onSearchTasks(searchString: string) {
+    this.searchTaskText = searchString;
+    this.updateTasks();
+  }
+
+  // фильтрация задач по статусу (все, решенные, нерешенные)
+   onFilterTasksByStatus(status: boolean) {
+    this.statusFilter = status;
+    this.updateTasks();
+  }
+
+  // фильтрация задач по приоритету
+   onFilterTasksByPriority(priority: Priority) {
+    this.priorityFilter = priority;
+    this.updateTasks();
+  }
+
+   updateTasks() {
+    this.dataHandler.searchTasks(
+      this.selectedCategory,
+      this.searchTaskText,
+      this.statusFilter,
+      this.priorityFilter
+    ).subscribe((tasks: Task[]) => {
+      this.tasks = tasks;
+    });
+  }
 }

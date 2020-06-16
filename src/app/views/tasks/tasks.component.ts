@@ -8,6 +8,7 @@ import {EditTaskDialogComponent} from "../../dialog/edit-task-dialog/edit-task-d
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponent} from "../../dialog/confirm-dialog/confirm-dialog.component";
 import {Category} from "../../model/Category";
+import {Priority} from "../../model/Priority";
 
 @Component({
   selector: 'app-tasks',
@@ -15,9 +16,10 @@ import {Category} from "../../model/Category";
   styleUrls: ['./tasks.component.css']
 })
 export class TasksComponent implements OnInit {
-  // поля для таблицы (те, что отображают данные из задачи - должны совпадать с названиями переменных класса)
-  displayedColumns: string[] = ['color', 'id', 'title', 'date', 'priority', 'category', 'operations', 'select'];
-  dataSource: MatTableDataSource<Task>; // контейнер - источник данных для таблицы
+
+  @Output()
+  deleteTask = new EventEmitter<Task>();
+   dataSource: MatTableDataSource<Task>; // контейнер - источник данных для таблицы
 
   // ссылки на компоненты таблицы
   @ViewChild(MatPaginator, {static: false}) private paginator: MatPaginator;
@@ -25,22 +27,43 @@ export class TasksComponent implements OnInit {
 
 
   @Output()
-  deleteTask = new EventEmitter<Task>();
+  selectCategory = new EventEmitter<Category>(); // нажали на категорию из списка задач
 
   @Output()
   updateTask = new EventEmitter<Task>();
 
   @Output()
-  selectCategory = new EventEmitter<Category>(); // нажали на категорию из списка задач
+  filterByTitle = new EventEmitter<string>();
+
+  @Output()
+  filterByStatus = new EventEmitter<boolean>();
+
+  @Output()
+  filterByPriority = new EventEmitter<Priority>();
+
+  // поиск
+   searchTaskText: string; // текущее значение для поиска задач
+   selectedStatusFilter: boolean = null;   // по-умолчанию будут показываться задачи по всем статусам (решенные и нерешенные)
+   selectedPriorityFilter: Priority = null;   // по-умолчанию будут показываться задачи по всем приоритетам
 
 
-  tasks: Task[];
+
+  // поля для таблицы (те, что отображают данные из задачи - должны совпадать с названиями переменных класса)
+   displayedColumns: string[] = ['color', 'id', 'title', 'date', 'priority', 'category', 'operations', 'select'];
+
+   priorities: Priority[]; // список приоритетов (для фильтрации задач)
+   tasks: Task[];
 
   // текущие задачи для отображения на странице
   @Input('tasks')
-  set setTasks(tasks: Task[]) { // напрямую не присваиваем значения в переменную, только через @Input
+   set setTasks(tasks: Task[]) { // напрямую не присваиваем значения в переменную, только через @Input
     this.tasks = tasks;
     this.fillTable();
+  }
+
+  @Input('priorities')
+  set setPriorities(priorities: Priority[]) {
+    this.priorities = priorities;
   }
 
   constructor(
@@ -60,8 +83,9 @@ export class TasksComponent implements OnInit {
   }
 
 
+
   // в зависимости от статуса задачи - вернуть цвет названия
-  getPriorityColor(task: Task): string {
+   getPriorityColor(task: Task): string {
 
     // цвет завершенной задачи
     if (task.completed) {
@@ -77,7 +101,7 @@ export class TasksComponent implements OnInit {
   }
 
   // показывает задачи с применением всех текущий условий (категория, поиск, фильтры и пр.)
-  fillTable(): void {
+   fillTable(): void {
 
     if (!this.dataSource) {
       return;
@@ -114,13 +138,13 @@ export class TasksComponent implements OnInit {
 
   }
 
-  addTableObjects(): void {
+   addTableObjects(): void {
     this.dataSource.sort = this.sort; // компонент для сортировки данных (если необходимо)
     this.dataSource.paginator = this.paginator; // обновить компонент постраничности (кол-во записей, страниц)
   }
 
   // диалоговое редактирования для добавления задачи
-  openEditTaskDialog(task: Task): void {
+   openEditTaskDialog(task: Task): void {
 
     // открытие диалогового окна
     const dialogRef = this.dialog.open(EditTaskDialogComponent, {
@@ -158,10 +182,13 @@ export class TasksComponent implements OnInit {
 
 
   // диалоговое окно подтверждения удаления
-  openDeleteDialog(task: Task) {
+   openDeleteDialog(task: Task) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '500px',
-      data: {dialogTitle: 'Подтвердите действие', message: `Вы действительно хотите удалить задачу: "${task.title}"?`},
+      data: {
+        dialogTitle: 'Подтвердите действие',
+        message: `Вы действительно хотите удалить задачу: "${task.title}"?`
+      },
       autoFocus: false
     });
 
@@ -172,14 +199,40 @@ export class TasksComponent implements OnInit {
     });
   }
 
-  onToggleStatus(task: Task) {
+   onToggleStatus(task: Task) {
     task.completed = !task.completed;
     this.updateTask.emit(task);
   }
 
 
-  onSelectCategory(category: Category) {
+   onSelectCategory(category: Category) {
     this.selectCategory.emit(category);
+  }
+
+  // фильтрация по названию
+   onFilterByTitle() {
+    this.filterByTitle.emit(this.searchTaskText);
+  }
+
+  // фильтрация по статусу
+   onFilterByStatus(value: boolean) {
+
+    // на всякий случай проверяем изменилось ли значение (хотя сам UI компонент должен это делать)
+    if (value !== this.selectedStatusFilter) {
+      this.selectedStatusFilter = value;
+      this.filterByStatus.emit(this.selectedStatusFilter);
+    }
+  }
+
+
+  // фильтрация по приоритету
+   onFilterByPriority(value: Priority) {
+
+    // на всякий случай проверяем изменилось ли значение (хотя сам UI компонент должен это делать)
+    if (value !== this.selectedPriorityFilter) {
+      this.selectedPriorityFilter = value;
+      this.filterByPriority.emit(this.selectedPriorityFilter);
+    }
   }
 
 }
