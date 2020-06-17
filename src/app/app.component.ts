@@ -3,6 +3,7 @@ import {DataHandlerService} from "./service/data-handler.service";
 import {Task} from "./model/Task";
 import {Category} from "./model/Category";
 import {Priority} from "./model/Priority";
+import {zip} from "rxjs";
 
 @Component({
   selector: 'app-root',
@@ -14,6 +15,12 @@ export class AppComponent implements OnInit {
    tasks: Task[];
    categories: Category[]; // все категории
    priorities: Priority[]; // все приоритеты
+
+  // статистика
+   totalTasksCountInCategory: number;
+   completedCountInCategory: number;
+   uncompletedCountInCategory: number;
+   uncompletedTotalTasksCount: number;
 
 
    selectedCategory: Category = null;
@@ -47,7 +54,7 @@ export class AppComponent implements OnInit {
 
     this.selectedCategory = category;
 
-    this.updateTasks();
+    this.updateTasksAndStat();
 
   }
 
@@ -70,7 +77,7 @@ export class AppComponent implements OnInit {
    onUpdateTask(task: Task) {
 
     this.dataHandler.updateTask(task).subscribe(cat => {
-      this.updateTasks()
+      this.updateTasksAndStat();
     });
 
   }
@@ -79,7 +86,7 @@ export class AppComponent implements OnInit {
    onDeleteTask(task: Task) {
 
     this.dataHandler.deleteTask(task.id).subscribe(cat => {
-      this.updateTasks()
+      this.updateTasksAndStat();
     });
   }
 
@@ -119,7 +126,7 @@ export class AppComponent implements OnInit {
 
     this.dataHandler.addTask(task).subscribe(result => {
 
-      this.updateTasks();
+      this.updateTasksAndStat();
 
     });
 
@@ -142,5 +149,31 @@ export class AppComponent implements OnInit {
     this.dataHandler.searchCategories(title).subscribe(categories => {
       this.categories = categories;
     });
+  }
+
+  // показывает задачи с применением всех текущий условий (категория, поиск, фильтры и пр.)
+   updateTasksAndStat() {
+
+    this.updateTasks(); // обновить список задач
+
+    // обновить переменные для статистики
+    this.updateStat();
+
+  }
+
+  // обновить статистику
+   updateStat() {
+    zip(
+      this.dataHandler.getTotalCountInCategory(this.selectedCategory),
+      this.dataHandler.getCompletedCountInCategory(this.selectedCategory),
+      this.dataHandler.getUncompletedCountInCategory(this.selectedCategory),
+      this.dataHandler.getUncompletedTotalCount())
+
+      .subscribe(array => {
+        this.totalTasksCountInCategory = array[0];
+        this.completedCountInCategory = array[1];
+        this.uncompletedCountInCategory = array[2];
+        this.uncompletedTotalTasksCount = array[3]; // нужно для категории Все
+      });
   }
 }

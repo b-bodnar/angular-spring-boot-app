@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-stat',
@@ -6,10 +6,25 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./stat.component.css']
 })
 export class StatComponent implements OnInit {
+  // ----------------------- входящие параметры ----------------------------
 
-  constructor() { }
+  @Input()
+  totalTasksInCategory: number; // общее кол-во задач в категории
 
-  ngOnInit(): void {
-  }
+  @Input()
+  completeTasksInCategory: number; // кол-во решенных задач в категории
+
+  @Input()
+  uncompleteTasksInCategory: number; // кол-во нерешенных задач в категории
+
+
+
+
+  // -------------------------------------------------------------------------
+
+
+  constructor() {}
+
+  ngOnInit() {}
 
 }

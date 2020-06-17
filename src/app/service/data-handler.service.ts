@@ -14,9 +14,9 @@ import {PriorityDAOArray} from "../data/dao/impl/PriorityDAOArray";
 export class DataHandlerService {
   // релизации работы с данными с помощью массива
   // (можно подставлять любые релизации, в том числе с БД. Главное - соблюдать интерфейсы)
-  private taskDaoArray = new TaskDAOArray();
-  private categoryDaoArray = new CategoryDAOArray();
-  private priorityDaoArray = new PriorityDAOArray();
+   taskDaoArray = new TaskDAOArray();
+   categoryDaoArray = new CategoryDAOArray();
+   priorityDaoArray = new PriorityDAOArray();
 
 
   constructor() {
@@ -71,5 +71,22 @@ export class DataHandlerService {
     return this.categoryDaoArray.search(title);
   }
 
+  // статистика
+
+  getCompletedCountInCategory(category: Category): Observable<number> {
+    return this.taskDaoArray.getCompletedCountInCategory(category);
+  }
+
+  getUncompletedTotalCount(): Observable<number> {
+    return this.taskDaoArray.getUncompletedCountInCategory(null);
+  }
+
+  getUncompletedCountInCategory(category: Category): Observable<number> {
+    return this.taskDaoArray.getUncompletedCountInCategory(category);
+  }
+
+  getTotalCountInCategory(category: Category): Observable<number> {
+    return this.taskDaoArray.getTotalCountInCategory(category);
+  }
 
 }
