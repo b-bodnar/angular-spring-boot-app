@@ -14,9 +14,9 @@ import {PriorityDAOArray} from "../data/dao/impl/PriorityDAOArray";
 export class DataHandlerService {
   // релизации работы с данными с помощью массива
   // (можно подставлять любые релизации, в том числе с БД. Главное - соблюдать интерфейсы)
-   taskDaoArray = new TaskDAOArray();
-   categoryDaoArray = new CategoryDAOArray();
-   priorityDaoArray = new PriorityDAOArray();
+  private taskDaoArray = new TaskDAOArray();
+  private categoryDaoArray = new CategoryDAOArray();
+  private priorityDaoArray = new PriorityDAOArray();
 
 
   constructor() {
@@ -65,5 +65,11 @@ export class DataHandlerService {
   addCategory(title: string): Observable<Category> {
     return this.categoryDaoArray.add(new Category(null, title));
   }
+
+
+  searchCategories(title: string): Observable<Category[]> {
+    return this.categoryDaoArray.search(title);
+  }
+
 
 }

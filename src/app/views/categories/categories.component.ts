@@ -34,11 +34,15 @@ export class CategoriesComponent implements OnInit {
   @Output()
   addCategory = new EventEmitter<string>(); // передаем только название новой категории
 
-
+  // поиск категории
+  @Output()
+  searchCategory = new EventEmitter<string>(); // передаем строку для поиска
 
 
   // для отображения иконки редактирования при наведении на категорию
-   indexMouseMove: number;
+  indexMouseMove: number;
+  searchCategoryTitle: string; // текущее значение для поиска категорий
+
 
   constructor(
     private dataHandler: DataHandlerService,
@@ -54,7 +58,7 @@ export class CategoriesComponent implements OnInit {
   }
 
 
-   showTasksByCategory(category: Category): void {
+  showTasksByCategory(category: Category): void {
 
     // если не изменилось значение, ничего не делать (чтобы лишний раз не делать запрос данных)
     if (this.selectedCategory === category) {
@@ -68,13 +72,13 @@ export class CategoriesComponent implements OnInit {
   }
 
   // сохраняет индекс записи категории, над который в данный момент проходит мышка (и там отображается иконка редактирования)
-   showEditIcon(index: number) {
+  showEditIcon(index: number) {
     this.indexMouseMove = index;
 
   }
 
   // диалоговое окно для редактирования категории
-   openEditDialog(category: Category) {
+  openEditDialog(category: Category) {
     const dialogRef = this.dialog.open(EditCategoryDialogComponent, {
       data: [category.title, 'Редактирование категории', OperType.EDIT],
       width: '400px'
@@ -99,14 +103,29 @@ export class CategoriesComponent implements OnInit {
   }
 
   // диалоговое окно для добавления категории
-   openAddDialog() {
+  openAddDialog() {
 
-    const dialogRef = this.dialog.open(EditCategoryDialogComponent, {data: ['', 'Добавление категории', OperType.ADD], width: '400px'});
+    const dialogRef = this.dialog.open(EditCategoryDialogComponent, {
+      data: ['', 'Добавление категории', OperType.ADD],
+      width: '400px'
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.addCategory.emit(result as string); // вызываем внешний обработчик
       }
     });
+  }
+
+  // поиск категории
+  search() {
+
+
+    if (this.searchCategoryTitle == null) {
+      return;
+    }
+
+    this.searchCategory.emit(this.searchCategoryTitle);
+
   }
 }
