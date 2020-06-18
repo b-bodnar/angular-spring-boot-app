@@ -1,3 +1,4 @@
+
 <div class="wrapper ">
 
   <app-categories
@@ -6,6 +7,8 @@
     (updateCategory)="onUpdateCategory($event)"
     (addCategory)="onAddCategory($event)"
     (searchCategory)="onSearchCategory($event)"
+    [categoryMap]="categoryMap"
+    [uncompletedTotal]="uncompletedTotalTasksCount"
 
 
     [selectedCategory]="selectedCategory"
@@ -16,7 +19,14 @@
 
     <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
 
-      <app-header></app-header>
+      <!--    навигация с шапкой и списком категорий-->
+
+      <app-header
+        (toggleStat)="toggleStat($event)"
+        [categoryName]="selectedCategory ? selectedCategory.title: 'Все'"
+        [showStat]="showStat"
+
+      ></app-header>
 
     </nav>
 
@@ -26,8 +36,9 @@
 
         <!-- статистика -->
         <app-stat
-          [totalTasksInCategory]="totalTasksCountInCategory"
           [completeTasksInCategory]="completedCountInCategory"
+          [showStat]="showStat"
+          [totalTasksInCategory]="totalTasksCountInCategory"
           [uncompleteTasksInCategory]="uncompletedCountInCategory"
         ></app-stat>
 

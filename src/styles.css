@@ -2,8 +2,6 @@
 @import "assets/css/material-dashboard.css";
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 @import "~bootstrap-css-only/css/bootstrap.min.css";
-
-
 .not-found {
   margin-top: 30px;
   font-size: 20px;
@@ -46,17 +44,10 @@
   color: #8f8f8f;
 }
 
+.main-panel > .content{
+  margin-top: 30px !important;
+}
 
-app-header {
+app-header{
   width: 100%;
 }
-
-.ng-sidebar {
-  box-shadow: 0 0 13px rgba(0, 0, 0, 0.4);
-}
-
-.main-panel > .content {
-  margin-top: 30px;
-  background-color: transparent !important;
-}
-

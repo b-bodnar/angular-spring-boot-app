@@ -6,6 +6,7 @@ import {Component, Input, OnInit} from '@angular/core';
   styleUrls: ['./stat.component.css']
 })
 export class StatComponent implements OnInit {
+
   // ----------------------- входящие параметры ----------------------------
 
   @Input()
@@ -17,7 +18,8 @@ export class StatComponent implements OnInit {
   @Input()
   uncompleteTasksInCategory: number; // кол-во нерешенных задач в категории
 
-
+  @Input()
+  showStat: boolean; // показать или скрыть статистику
 
 
   // -------------------------------------------------------------------------

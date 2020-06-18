@@ -1,3 +1,4 @@
+
 <div class="sidebar" data-background-color="white" data-color="purple">
 
   <div id="categories">
@@ -22,16 +23,12 @@
 
         <!--      поиск категорий -->
         <div class="search-category-area">
-
           <mat-form-field class="example-full-width">
             <input
-
               #inputSearchCategory
-
               (keydown.escape)="searchCategoryTitle = ''; search()"
               (keyup)="search()"
               [(ngModel)]="searchCategoryTitle"
-
               matInput
               maxlength="256"
               placeholder="Поиск категорий"
@@ -65,6 +62,8 @@
             <!--          название категории-->
             <span class="all-category-title">Все</span>
 
+            <!--сколько невыполненных задач-->
+            <span class="uncompleted-count"> {{uncompletedTotal}}</span>
 
           </a>
         </li>
@@ -76,12 +75,12 @@
 
 
         <li
-          (click)="showTasksByCategory(category)" (mouseenter)="showEditIcon(index)"
-
-          *ngFor="let category of categories; let index = index "
+          (click)="showTasksByCategory(mapValue.key)" (mouseenter)="showEditIcon(index)"
 
           (mouseleave)="showEditIcon(null)"
-          [class.active]="category === selectedCategory"
+
+          *ngFor="let mapValue of selectedCategoryMap | keyvalue; let index = index"
+          [class.active]="mapValue.key === selectedCategory"
 
 
           class="nav-item pointer"
@@ -90,7 +89,7 @@
           <a class="nav-link">
 
             <!--          название категории-->
-            <span class="category-title">{{category.title}}</span>
+            <span class="category-title">{{mapValue.key.title}}</span>
 
 
             <!--         кнопка редактирования категории-->
@@ -98,7 +97,7 @@
 
             <mat-icon
               *ngIf="indexMouseMove === index"
-              (click)="$event.stopPropagation(); openEditDialog(category)"
+              (click)="$event.stopPropagation(); openEditDialog(mapValue.key)"
 
               class="edit-category-icon"
 
@@ -109,6 +108,10 @@
 
 
           </span>
+
+
+            <!--сколько невыполненных задач-->
+            <span class="uncompleted-count"> {{mapValue.value}}</span>
 
 
           </a>

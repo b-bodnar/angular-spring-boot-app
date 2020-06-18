@@ -17,10 +17,6 @@ import {OperType} from "../../dialog/OperType";
   styleUrls: ['./tasks.component.css']
 })
 export class TasksComponent implements OnInit {
-
-  dataSource: MatTableDataSource<Task>; // контейнер - источник данных для таблицы
-
-
   // ссылки на компоненты таблицы
   @ViewChild(MatPaginator, {static: false}) private paginator: MatPaginator;
   @ViewChild(MatSort, {static: false}) private sort: MatSort;
@@ -47,21 +43,10 @@ export class TasksComponent implements OnInit {
   @Output()
   addTask = new EventEmitter<Task>();
 
-  // поиск
-  searchTaskText: string; // текущее значение для поиска задач
-  selectedStatusFilter: boolean = null;   // по-умолчанию будут показываться задачи по всем статусам (решенные и нерешенные)
-  selectedPriorityFilter: Priority = null;   // по-умолчанию будут показываться задачи по всем приоритетам
-
-
-  // поля для таблицы (те, что отображают данные из задачи - должны совпадать с названиями переменных класса)
-  displayedColumns: string[] = ['color', 'id', 'title', 'date', 'priority', 'category', 'operations', 'select'];
-
-  priorities: Priority[]; // список приоритетов (для фильтрации задач)
-  tasks: Task[];
 
   // текущие задачи для отображения на странице
   @Input('tasks')
-  set setTasks(tasks: Task[]) { // напрямую не присваиваем значения в переменную, только через @Input
+   set setTasks(tasks: Task[]) { // напрямую не присваиваем значения в переменную, только через @Input
     this.tasks = tasks;
     this.fillTable();
   }
@@ -73,6 +58,25 @@ export class TasksComponent implements OnInit {
 
   @Input()
   selectedCategory: Category;
+
+
+   dataSource: MatTableDataSource<Task>; // контейнер - источник данных для таблицы
+
+
+  // поиск
+   searchTaskText: string; // текущее значение для поиска задач
+   selectedStatusFilter: boolean = null;   // по-умолчанию будут показываться задачи по всем статусам (решенные и нерешенные)
+   selectedPriorityFilter: Priority = null;   // по-умолчанию будут показываться задачи по всем приоритетам
+
+
+
+  // поля для таблицы (те, что отображают данные из задачи - должны совпадать с названиями переменных класса)
+   displayedColumns: string[] = ['color', 'id', 'title', 'date', 'priority', 'category', 'operations', 'select'];
+
+   priorities: Priority[]; // список приоритетов (для фильтрации задач)
+   tasks: Task[];
+
+
 
   constructor(
     private dataHandler: DataHandlerService, // доступ к данным
@@ -87,12 +91,15 @@ export class TasksComponent implements OnInit {
 
     // датасорс обязательно нужно создавать для таблицы, в него присваивается любой источник (БД, массивы, JSON и пр.)
     this.dataSource = new MatTableDataSource();
+
     this.onSelectCategory(null);
+
   }
 
 
+
   // в зависимости от статуса задачи - вернуть цвет названия
-  getPriorityColor(task: Task): string {
+   getPriorityColor(task: Task): string {
 
     // цвет завершенной задачи
     if (task.completed) {
@@ -108,7 +115,8 @@ export class TasksComponent implements OnInit {
   }
 
   // показывает задачи с применением всех текущий условий (категория, поиск, фильтры и пр.)
-  fillTable(): void {
+   fillTable(): void {
+
 
     if (!this.dataSource) {
       return;
@@ -145,13 +153,13 @@ export class TasksComponent implements OnInit {
 
   }
 
-  addTableObjects(): void {
+   addTableObjects(): void {
     this.dataSource.sort = this.sort; // компонент для сортировки данных (если необходимо)
     this.dataSource.paginator = this.paginator; // обновить компонент постраничности (кол-во записей, страниц)
   }
 
   // диалоговое редактирования для добавления задачи
-  openEditTaskDialog(task: Task): void {
+   openEditTaskDialog(task: Task): void {
 
     // открытие диалогового окна
     const dialogRef = this.dialog.open(EditTaskDialogComponent, {
@@ -189,7 +197,7 @@ export class TasksComponent implements OnInit {
 
 
   // диалоговое окно подтверждения удаления
-  openDeleteDialog(task: Task) {
+   openDeleteDialog(task: Task): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '500px',
       data: {
@@ -206,23 +214,23 @@ export class TasksComponent implements OnInit {
     });
   }
 
-  onToggleStatus(task: Task) {
+   onToggleStatus(task: Task): void {
     task.completed = !task.completed;
     this.updateTask.emit(task);
   }
 
 
-  onSelectCategory(category: Category) {
+   onSelectCategory(category: Category): void {
     this.selectCategory.emit(category);
   }
 
   // фильтрация по названию
-  onFilterByTitle() {
+   onFilterByTitle(): void {
     this.filterByTitle.emit(this.searchTaskText);
   }
 
   // фильтрация по статусу
-  onFilterByStatus(value: boolean) {
+   onFilterByStatus(value: boolean): void {
 
     // на всякий случай проверяем изменилось ли значение (хотя сам UI компонент должен это делать)
     if (value !== this.selectedStatusFilter) {
@@ -233,7 +241,7 @@ export class TasksComponent implements OnInit {
 
 
   // фильтрация по приоритету
-  onFilterByPriority(value: Priority) {
+   onFilterByPriority(value: Priority): void{
 
     // на всякий случай проверяем изменилось ли значение (хотя сам UI компонент должен это делать)
     if (value !== this.selectedPriorityFilter) {
@@ -243,7 +251,7 @@ export class TasksComponent implements OnInit {
   }
 
   // диалоговое окно для добавления задачи
-  openAddTaskDialog() {
+   openAddTaskDialog(): void {
 
     // то же самое, что и при редактировании, но только передаем пустой объект Task
     const task = new Task(null, '', false, null, this.selectedCategory);
