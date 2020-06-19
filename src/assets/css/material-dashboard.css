@@ -1,18 +1,21 @@
-/*!
+/*
+=========================================================
+ Material Dashboard - v2.1.1
+=========================================================
 
- =========================================================
- * Material Dashboard - v2.1.0
- =========================================================
+ Product Page: https://www.creative-tim.com/product/material-dashboard
+ Copyright 2019 Creative Tim (https://www.creative-tim.com)
+ Licensed under MIT (https://github.com/creativetimofficial/material-dashboard/blob/master/LICENSE.md)
 
- * Product Page: https://www.creative-tim.com/product/material-dashboard
- * Copyright 2020 Creative Tim (http://www.creative-tim.com)
+ Coded by Creative Tim
 
- =========================================================
+=========================================================
 
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.*/
 
- */
+
 /*     brand Colors              */
+
 .card {
   font-size: .875rem;
 }
@@ -356,7 +359,6 @@ template {
 }
 
 @media print {
-
   *,
   *::before,
   *::after {
@@ -4435,7 +4437,6 @@ tbody.collapse.show {
 }
 
 @media (max-width: 575.98px) {
-
   .navbar-expand-sm > .container,
   .navbar-expand-sm > .container-fluid {
     padding-right: 0;
@@ -4488,7 +4489,6 @@ tbody.collapse.show {
 }
 
 @media (max-width: 767.98px) {
-
   .navbar-expand-md > .container,
   .navbar-expand-md > .container-fluid {
     padding-right: 0;
@@ -4541,7 +4541,6 @@ tbody.collapse.show {
 }
 
 @media (max-width: 991.98px) {
-
   .navbar-expand-lg > .container,
   .navbar-expand-lg > .container-fluid {
     padding-right: 0;
@@ -4594,7 +4593,6 @@ tbody.collapse.show {
 }
 
 @media (max-width: 1199.98px) {
-
   .navbar-expand-xl > .container,
   .navbar-expand-xl > .container-fluid {
     padding-right: 0;
@@ -5322,7 +5320,6 @@ tbody.collapse.show {
   from {
     background-position: 1rem 0;
   }
-
   to {
     background-position: 0 0;
   }
@@ -6074,7 +6071,6 @@ button.close {
   border-top-color: rgba(0, 0, 0, 0.25);
 }
 
-
 .bs-popover-top .arrow::after,
 .bs-popover-auto[x-placement^="top"] .arrow::after {
   bottom: 1px;
@@ -6107,7 +6103,6 @@ button.close {
   border-right-color: rgba(0, 0, 0, 0.25);
 }
 
-
 .bs-popover-right .arrow::after,
 .bs-popover-auto[x-placement^="right"] .arrow::after {
   left: 1px;
@@ -6136,7 +6131,6 @@ button.close {
   top: 0;
   border-bottom-color: rgba(0, 0, 0, 0.25);
 }
-
 
 .bs-popover-bottom .arrow::after,
 .bs-popover-auto[x-placement^="bottom"] .arrow::after {
@@ -6181,7 +6175,6 @@ button.close {
   right: 0;
   border-left-color: rgba(0, 0, 0, 0.25);
 }
-
 
 .bs-popover-left .arrow::after,
 .bs-popover-auto[x-placement^="left"] .arrow::after {
@@ -6247,7 +6240,6 @@ button.close {
 }
 
 @supports (transform-style: preserve-3d) {
-
   .carousel-item-next.carousel-item-left,
   .carousel-item-prev.carousel-item-right {
     transform: translate3d(0, 0, 0);
@@ -6260,7 +6252,6 @@ button.close {
 }
 
 @supports (transform-style: preserve-3d) {
-
   .carousel-item-next,
   .active.carousel-item-right {
     transform: translate3d(100%, 0, 0);
@@ -6273,7 +6264,6 @@ button.close {
 }
 
 @supports (transform-style: preserve-3d) {
-
   .carousel-item-prev,
   .active.carousel-item-left {
     transform: translate3d(-100%, 0, 0);
@@ -11566,21 +11556,21 @@ fieldset[disabled] .form-group.is-focused .form-check .form-check-label {
   opacity: 0.2;
 }
 
-.form-check .form-check-input:checked ~ .form-check-sign .check {
+.form-check .form-check-input:checked + .form-check-sign .check {
   background: #9c27b0;
 }
 
-.form-check .form-check-input:checked ~ .form-check-sign .check:before {
+.form-check .form-check-input:checked + .form-check-sign .check:before {
   color: #FFFFFF;
   box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 20px -12px 0 11px;
   animation: checkboxOn 0.3s forwards;
 }
 
-.form-check .form-check-input:checked ~ .form-check-sign:before {
+.form-check .form-check-input:checked + .form-check-sign:before {
   animation: rippleOn 500ms;
 }
 
-.form-check .form-check-input:checked ~ .form-check-sign .check:after {
+.form-check .form-check-input:checked + .form-check-sign .check:after {
   animation: rippleOn 500ms forwards;
 }
 
@@ -11621,11 +11611,9 @@ fieldset[disabled] .form-check .form-check-input,
   0% {
     box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 15px 2px 0 11px;
   }
-
   50% {
     box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 20px 2px 0 11px;
   }
-
   100% {
     box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 20px -12px 0 11px;
   }
@@ -11635,11 +11623,9 @@ fieldset[disabled] .form-check .form-check-input,
   0% {
     opacity: 0;
   }
-
   50% {
     opacity: 0.2;
   }
-
   100% {
     opacity: 0;
   }
@@ -11649,11 +11635,9 @@ fieldset[disabled] .form-check .form-check-input,
   0% {
     opacity: 0;
   }
-
   50% {
     opacity: 0.2;
   }
-
   100% {
     opacity: 0;
   }
@@ -11802,11 +11786,9 @@ fieldset[disabled] .form-group.is-focused .form-check .form-check-label {
   0% {
     box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 15px 2px 0 11px;
   }
-
   50% {
     box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 20px 2px 0 11px;
   }
-
   100% {
     box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 20px -12px 0 11px;
   }
@@ -11816,11 +11798,9 @@ fieldset[disabled] .form-group.is-focused .form-check .form-check-label {
   0% {
     opacity: 0;
   }
-
   50% {
     opacity: 0.2;
   }
-
   100% {
     opacity: 0;
   }
@@ -11830,11 +11810,9 @@ fieldset[disabled] .form-group.is-focused .form-check .form-check-label {
   0% {
     opacity: 0;
   }
-
   50% {
     opacity: 0.2;
   }
-
   100% {
     opacity: 0;
   }
@@ -14809,7 +14787,6 @@ h2.title {
 }
 
 @media (min-width: 768px) {
-
   .dropdown-menu .dropdown-item,
   .dropdown-menu li > a {
     padding-right: 1.5rem;
@@ -14886,7 +14863,6 @@ a[aria-expanded="true"] .caret,
     opacity: 0;
     transform: scale(0);
   }
-
   to {
     opacity: 1;
     transform: scale(1);
@@ -15158,7 +15134,7 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 }
 
 .sidebar {
-  position: fixed;
+  /*position: fixed;*/
   top: 0;
   bottom: 0;
   left: 0;
@@ -15565,7 +15541,8 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 .main-panel {
   position: relative;
   float: right;
-  width: calc(100% - 260px);
+  /*width: calc(100% - 260px);*/
+  width: 100%;
   transition: 0.33s, cubic-bezier(0.685, 0.0473, 0.346, 1);
 }
 
@@ -15696,7 +15673,6 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
     position: absolute;
     width: 100%;
     bottom: 13px;
-    left: 0;
   }
 }
 
@@ -15734,7 +15710,7 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
   right: 0;
   width: 64px;
   background: rgba(0, 0, 0, 0.3);
-  z-index: 3;
+  z-index: 1031;
   border-radius: 8px 0 0 8px;
   text-align: center;
 }
@@ -17035,6 +17011,7 @@ label {
 }
 
 /*           Animations              */
+
 .animation-transition-general,
 .sidebar .sidebar-wrapper > .nav [data-toggle="collapse"] ~ div > ul > li > a span,
 .sidebar .sidebar-wrapper .user .user-info [data-toggle="collapse"] ~ div > ul > li > a span,
@@ -17136,48 +17113,6 @@ label {
 
 .off-canvas-sidebar .wrapper-full-page .page-header {
   padding: 15vh 0 !important;
-}
-
-html[dir="rtl"] .main-panel {
-  float: left;
-}
-
-html[dir="rtl"] .sidebar,
-html[dir="rtl"] .off-canvas-sidebar nav .navbar-collapse {
-  text-align: right;
-}
-
-html[dir="rtl"] .sidebar {
-  left: unset;
-  right: 0;
-}
-
-html[dir="rtl"] .sidebar .nav {
-  padding-right: 0;
-}
-
-html[dir="rtl"] .sidebar .nav i {
-  float: right;
-  margin-left: 15px;
-  margin-right: unset;
-}
-
-html[dir="rtl"] .card.card-chart {
-  direction: ltr;
-}
-
-html[dir="rtl"] .card.card-chart .card-title,
-html[dir="rtl"] .card.card-chart .card-category {
-  text-align: right;
-}
-
-html[dir="rtl"] .card .card-body,
-html[dir="rtl"] .card .card-footer {
-  direction: rtl;
-}
-
-html[dir="rtl"] .form-check .form-check-sign .check:before {
-  margin-right: 10px;
 }
 
 .btn.btn-facebook {
@@ -18149,6 +18084,7 @@ Licensed under the MIT license - http://opensource.org/licenses/MIT
 
 Copyright (c) 2015 Daniel Eden
 */
+
 .animated {
   -webkit-animation-duration: 1s;
   animation-duration: 1s;
@@ -18179,13 +18115,11 @@ Copyright (c) 2015 Daniel Eden
 }
 
 @-webkit-keyframes shake {
-
   from,
   to {
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
   }
-
   10%,
   30%,
   50%,
@@ -18194,7 +18128,6 @@ Copyright (c) 2015 Daniel Eden
     -webkit-transform: translate3d(-10px, 0, 0);
     transform: translate3d(-10px, 0, 0);
   }
-
   20%,
   40%,
   60%,
@@ -18205,13 +18138,11 @@ Copyright (c) 2015 Daniel Eden
 }
 
 @keyframes shake {
-
   from,
   to {
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
   }
-
   10%,
   30%,
   50%,
@@ -18220,7 +18151,6 @@ Copyright (c) 2015 Daniel Eden
     -webkit-transform: translate3d(-10px, 0, 0);
     transform: translate3d(-10px, 0, 0);
   }
-
   20%,
   40%,
   60%,
@@ -18241,7 +18171,6 @@ Copyright (c) 2015 Daniel Eden
     -webkit-transform: translate3d(0, -100%, 0);
     transform: translate3d(0, -100%, 0);
   }
-
   to {
     opacity: 1;
     -webkit-transform: none;
@@ -18255,7 +18184,6 @@ Copyright (c) 2015 Daniel Eden
     -webkit-transform: translate3d(0, -100%, 0);
     transform: translate3d(0, -100%, 0);
   }
-
   to {
     opacity: 1;
     -webkit-transform: none;
@@ -18272,7 +18200,6 @@ Copyright (c) 2015 Daniel Eden
   from {
     opacity: 1;
   }
-
   to {
     opacity: 0;
   }
@@ -18282,7 +18209,6 @@ Copyright (c) 2015 Daniel Eden
   from {
     opacity: 1;
   }
-
   to {
     opacity: 0;
   }
@@ -18297,7 +18223,6 @@ Copyright (c) 2015 Daniel Eden
   from {
     opacity: 1;
   }
-
   to {
     opacity: 0;
     -webkit-transform: translate3d(0, 100%, 0);
@@ -18309,7 +18234,6 @@ Copyright (c) 2015 Daniel Eden
   from {
     opacity: 1;
   }
-
   to {
     opacity: 0;
     -webkit-transform: translate3d(0, 100%, 0);
@@ -18326,7 +18250,6 @@ Copyright (c) 2015 Daniel Eden
   from {
     opacity: 1;
   }
-
   to {
     opacity: 0;
     -webkit-transform: translate3d(0, -100%, 0);
@@ -18338,7 +18261,6 @@ Copyright (c) 2015 Daniel Eden
   from {
     opacity: 1;
   }
-
   to {
     opacity: 0;
     -webkit-transform: translate3d(0, -100%, 0);
@@ -18441,6 +18363,7 @@ Copyright (c) 2015 Daniel Eden
 }
 
 /* perfect-scrollbar v0.6.13 */
+
 .ps-container {
   -ms-touch-action: auto;
   touch-action: auto;
@@ -18605,7 +18528,6 @@ Copyright (c) 2015 Daniel Eden
 }
 
 @media all and (max-width: 991px) {
-
   [class*="navbar-expand-"] > .container,
   [class*="navbar-expand-"] > .container-fluid {
     padding-left: 15px;
@@ -18906,6 +18828,7 @@ Copyright (c) 2015 Daniel Eden
 }
 
 /*          Changes for small display      */
+
 @media (max-width: 991px) {
   .form-group textarea {
     padding-top: 15px;
@@ -19288,241 +19211,193 @@ Copyright (c) 2015 Daniel Eden
       top: 0px;
       transform: rotate(0deg);
     }
-
     45% {
       top: 6px;
       transform: rotate(145deg);
     }
-
     75% {
       transform: rotate(130deg);
     }
-
     100% {
       transform: rotate(135deg);
     }
   }
-
   @-webkit-keyframes topbar-x {
     0% {
       top: 0px;
       -webkit-transform: rotate(0deg);
     }
-
     45% {
       top: 6px;
       -webkit-transform: rotate(145deg);
     }
-
     75% {
       -webkit-transform: rotate(130deg);
     }
-
     100% {
       -webkit-transform: rotate(135deg);
     }
   }
-
   @-moz-keyframes topbar-x {
     0% {
       top: 0px;
       -moz-transform: rotate(0deg);
     }
-
     45% {
       top: 6px;
       -moz-transform: rotate(145deg);
     }
-
     75% {
       -moz-transform: rotate(130deg);
     }
-
     100% {
       -moz-transform: rotate(135deg);
     }
   }
-
   @keyframes topbar-back {
     0% {
       top: 6px;
       transform: rotate(135deg);
     }
-
     45% {
       transform: rotate(-10deg);
     }
-
     75% {
       transform: rotate(5deg);
     }
-
     100% {
       top: 0px;
       transform: rotate(0);
     }
   }
-
   @-webkit-keyframes topbar-back {
     0% {
       top: 6px;
       -webkit-transform: rotate(135deg);
     }
-
     45% {
       -webkit-transform: rotate(-10deg);
     }
-
     75% {
       -webkit-transform: rotate(5deg);
     }
-
     100% {
       top: 0px;
       -webkit-transform: rotate(0);
     }
   }
-
   @-moz-keyframes topbar-back {
     0% {
       top: 6px;
       -moz-transform: rotate(135deg);
     }
-
     45% {
       -moz-transform: rotate(-10deg);
     }
-
     75% {
       -moz-transform: rotate(5deg);
     }
-
     100% {
       top: 0px;
       -moz-transform: rotate(0);
     }
   }
-
   @keyframes bottombar-x {
     0% {
       bottom: 0px;
       transform: rotate(0deg);
     }
-
     45% {
       bottom: 6px;
       transform: rotate(-145deg);
     }
-
     75% {
       transform: rotate(-130deg);
     }
-
     100% {
       transform: rotate(-135deg);
     }
   }
-
   @-webkit-keyframes bottombar-x {
     0% {
       bottom: 0px;
       -webkit-transform: rotate(0deg);
     }
-
     45% {
       bottom: 6px;
       -webkit-transform: rotate(-145deg);
     }
-
     75% {
       -webkit-transform: rotate(-130deg);
     }
-
     100% {
       -webkit-transform: rotate(-135deg);
     }
   }
-
   @-moz-keyframes bottombar-x {
     0% {
       bottom: 0px;
       -moz-transform: rotate(0deg);
     }
-
     45% {
       bottom: 6px;
       -moz-transform: rotate(-145deg);
     }
-
     75% {
       -moz-transform: rotate(-130deg);
     }
-
     100% {
       -moz-transform: rotate(-135deg);
     }
   }
-
   @keyframes bottombar-back {
     0% {
       bottom: 6px;
       transform: rotate(-135deg);
     }
-
     45% {
       transform: rotate(10deg);
     }
-
     75% {
       transform: rotate(-5deg);
     }
-
     100% {
       bottom: 0px;
       transform: rotate(0);
     }
   }
-
   @-webkit-keyframes bottombar-back {
     0% {
       bottom: 6px;
       -webkit-transform: rotate(-135deg);
     }
-
     45% {
       -webkit-transform: rotate(10deg);
     }
-
     75% {
       -webkit-transform: rotate(-5deg);
     }
-
     100% {
       bottom: 0px;
       -webkit-transform: rotate(0);
     }
   }
-
   @-moz-keyframes bottombar-back {
     0% {
       bottom: 6px;
       -moz-transform: rotate(-135deg);
     }
-
     45% {
       -moz-transform: rotate(10deg);
     }
-
     75% {
       -moz-transform: rotate(-5deg);
     }
-
     100% {
       bottom: 0px;
       -moz-transform: rotate(0);
     }
   }
-
   .navbar-toggler .icon-bar:nth-child(2) {
     top: 0px;
     -webkit-animation: topbar-back 500ms linear 0s;
@@ -19575,32 +19450,26 @@ Copyright (c) 2015 Daniel Eden
     0% {
       opacity: 0;
     }
-
     100% {
       opacity: 1;
     }
   }
-
   @-moz-keyframes fadeIn {
     0% {
       opacity: 0;
     }
-
     100% {
       opacity: 1;
     }
   }
-
   @keyframes fadeIn {
     0% {
       opacity: 0;
     }
-
     100% {
       opacity: 1;
     }
   }
-
   .dropdown-menu .divider {
     background-color: rgba(229, 229, 229, 0.15);
   }
