@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatDialog} from "@angular/material/dialog";
 import {SettingsDialogComponent} from "../../dialog/settings-dialog/settings-dialog.component";
+import {IntroService} from "../../service/intro.service";
 
 @Component({
   selector: 'app-header',
@@ -15,7 +16,9 @@ export class HeaderComponent implements OnInit {
   @Input()
    showStat: boolean;
 
-  constructor(private dialog: MatDialog
+  constructor(
+    private dialog: MatDialog,
+    private introService: IntroService
   ) {
   }
 
@@ -38,6 +41,9 @@ export class HeaderComponent implements OnInit {
 
   }
 
+  showIntroHelp() {
+    this.introService.startIntroJS(false);
+  }
 }
 
 
