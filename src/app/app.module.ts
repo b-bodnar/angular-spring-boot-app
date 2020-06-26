@@ -35,58 +35,60 @@ import {SettingsDialogComponent} from "./dialog/settings-dialog/settings-dialog.
 import {ColorPickerModule} from "ngx-color-picker";
 import {EditPriorityDialogComponent} from "./dialog/edit-priority-dialog/edit-priority-dialog.component";
 import {SidebarModule} from "ng-sidebar";
+import {DeviceDetectorModule} from "ngx-device-detector";
 
 registerLocaleData(localeRu);
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        CategoriesComponent,
-        TasksComponent,
-        EditTaskDialogComponent,
-        ConfirmDialogComponent,
-        TaskDatePipe,
-        EditCategoryDialogComponent,
-        FooterComponent,
-        AboutDialogComponent,
-        HeaderComponent,
-        StatComponent,
-        StatCardComponent,
-        PrioritiesComponent,
-        SettingsDialogComponent,
-        EditPriorityDialogComponent
+  declarations: [
+    AppComponent,
+    CategoriesComponent,
+    TasksComponent,
+    EditTaskDialogComponent,
+    ConfirmDialogComponent,
+    TaskDatePipe,
+    EditCategoryDialogComponent,
+    FooterComponent,
+    AboutDialogComponent,
+    HeaderComponent,
+    StatComponent,
+    StatCardComponent,
+    PrioritiesComponent,
+    SettingsDialogComponent,
+    EditPriorityDialogComponent
 
-    ],
-    imports: [
-        BrowserModule,
-        MatTableModule,
-        MatSortModule,
-        MatPaginatorModule,
-        BrowserAnimationsModule,
-        MatDialogModule,
-        MatFormFieldModule,
-        FormsModule,
-        MatInputModule,
-        MatButtonModule,
-        MatIconModule,
-        MatOptionModule,
-        MatSelectModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MatCheckboxModule,
-        ColorPickerModule,
-        SidebarModule
-    ],
-    providers: [],
-    entryComponents: [
-        EditTaskDialogComponent,
-        ConfirmDialogComponent,
-        EditCategoryDialogComponent,
-        AboutDialogComponent,
-        SettingsDialogComponent,
-        EditPriorityDialogComponent
-    ],
-    bootstrap: [AppComponent]
+  ],
+  imports: [
+    BrowserModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
+    BrowserAnimationsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    FormsModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatCheckboxModule,
+    ColorPickerModule,
+    SidebarModule,
+    DeviceDetectorModule.forRoot()
+  ],
+  providers: [],
+  entryComponents: [
+    EditTaskDialogComponent,
+    ConfirmDialogComponent,
+    EditCategoryDialogComponent,
+    AboutDialogComponent,
+    SettingsDialogComponent,
+    EditPriorityDialogComponent
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule {
 }
