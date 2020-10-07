@@ -1,273 +1,271 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {DataHandlerService} from "../../service/data-handler.service";
-import {Task} from 'src/app/model/Task';
-import {MatTableDataSource} from "@angular/material/table";
-import {MatPaginator} from "@angular/material/paginator";
-import {MatSort} from "@angular/material/sort";
-import {EditTaskDialogComponent} from "../../dialog/edit-task-dialog/edit-task-dialog.component";
-import {MatDialog} from "@angular/material/dialog";
-import {ConfirmDialogComponent} from "../../dialog/confirm-dialog/confirm-dialog.component";
-import {Category} from "../../model/Category";
-import {Priority} from "../../model/Priority";
-import {OperType} from "../../dialog/OperType";
-import {DeviceDetectorService} from "ngx-device-detector";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Task} from '../../model/Task';
+import {EditTaskDialogComponent} from '../../dialog/edit-task-dialog/edit-task-dialog.component';
+import {ConfirmDialogComponent} from '../../dialog/confirm-dialog/confirm-dialog.component';
+import {Category} from '../../model/Category';
+import {DeviceDetectorService} from 'ngx-device-detector';
+import {Priority} from '../../model/Priority';
+import {DialogAction} from '../../object/DialogResult';
+import {MatDialog} from '@angular/material/dialog';
+import {PageEvent} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
+import {TaskSearchValues} from "../../data/dao/search/SearchObjects";
 
 @Component({
   selector: 'app-tasks',
   templateUrl: './tasks.component.html',
   styleUrls: ['./tasks.component.css']
 })
-export class TasksComponent implements OnInit {
-  @Output()
-  deleteTask = new EventEmitter<Task>(); // удаление задачи
-  @ViewChild(MatSort, {static: false}) private sort: MatSort;
-  @Output()
-  updateTask = new EventEmitter<Task>(); // обновление задачи
 
-  @Output()
-  selectCategory = new EventEmitter<Category>(); // нажали на категорию из списка задач
-  @Output()
-  filterByTitle = new EventEmitter<string>(); // поиск задач по названию
-  @Output()
-  filterByStatus = new EventEmitter<boolean>(); // фильтрация задач по статусу
-  @Output()
-  filterByPriority = new EventEmitter<Priority>(); // фильтрация задач по приоритету
-  @Output()
-  addTask = new EventEmitter<Task>(); // добавление новой задачи
-  // текущая выбранная категория (используется при создании новой задачи, чтобы эта категория была сразу выбрана)
+export class TaskListComponent implements OnInit {
+
+  @Input()
+  totalTasksFounded: number;
+
   @Input()
   selectedCategory: Category;
-  // ссылки на компоненты таблицы (должны присваиваться после обновления данных в таблице)
-  @ViewChild(MatPaginator, {static: false}) private paginator: MatPaginator;
-   dataSource: MatTableDataSource<Task>; // контейнер - источник данных для таблицы
 
-  // текущие задачи для отображения на странице
+  @Input()
+  showSearch: boolean;
+
   @Input('tasks')
-   set setTasks(tasks: Task[]) { // напрямую не присваиваем значения в переменную, только через @Input
+  set setTasks(tasks: Task[]) {
     this.tasks = tasks;
-    this.fillTable();
+    this.assignTableSource();
   }
 
-   tasks: Task[]; // задачи для отображения в таблице
-
-  // поиск
-   searchTaskText: string; // текущее значение для поиска задач
-   selectedStatusFilter: boolean = null;   // по-умолчанию будут показываться задачи по всем статусам (решенные и нерешенные)
-   selectedPriorityFilter: Priority = null;   // по-умолчанию будут показываться задачи по всем приоритетам
-
-   isMobile: boolean;
-
-
-  // поля для таблицы (те, что отображают данные из задачи - должны совпадать с названиями переменных класса)
-   displayedColumns: string[] = ['color', 'id', 'title', 'date', 'priority', 'category', 'operations', 'select'];
-
-   priorities: Priority[]; // список приоритетов (для фильтрации задач)
-
-  constructor(
-    private dataHandler: DataHandlerService, // доступ к данным
-    private dialog: MatDialog, // работа с диалоговыми окнами (показать, закрыть)
-    private deviceService: DeviceDetectorService // для определения типа устройства
-  ) {
-
-    this.isMobile = this.deviceService.isMobile();
-
+  @Input('taskSearchValues')
+  set setTaskSearchValues(taskSearchValues: TaskSearchValues) {
+    this.taskSearchValues = taskSearchValues;
+    this.initSearchValues();
+    this.initSortDirectionIcon();
   }
 
-  // все приоритеты (для фильтрации)
   @Input('priorities')
   set setPriorities(priorities: Priority[]) {
     this.priorities = priorities;
   }
 
+  @Input('categories')
+  set setCategories(categories: Category[]) {
+    this.categories = categories;
+  }
+
+  @Output()
+  addTask = new EventEmitter<Task>();
+
+  @Output()
+  deleteTask = new EventEmitter<Task>();
+
+  @Output()
+  updateTask = new EventEmitter<Task>();
+
+  @Output()
+  selectCategory = new EventEmitter<Category>();
+
+  @Output()
+  paging = new EventEmitter<PageEvent>();
+
+  @Output()
+  searchAction = new EventEmitter<TaskSearchValues>();
+
+  @Output()
+  toggleSearch = new EventEmitter<boolean>();
+  priorities: Priority[];
+  categories: Category[];
+  tasks: Task[];
+  displayedColumns: string[] = ['color', 'id', 'title', 'date', 'priority', 'category', 'operations', 'select'];
+  dataSource: MatTableDataSource<Task> = new MatTableDataSource<Task>();
+  changed = false;
+  readonly defaultSortColumn = 'title';
+  readonly defaultSortDirection = 'asc';
+  filterTitle: string;
+  filterCompleted: number;
+  filterPriorityId: number;
+  filterSortColumn: string;
+  filterSortDirection: string;
+  isMobile: boolean;
+  taskSearchValues: TaskSearchValues;
+  sortIconName: string;
+  readonly iconNameDown = 'arrow_downward';
+  readonly iconNameUp = 'arrow_upward';
+  readonly colorCompletedTask = '#F8F9FA';
+  readonly colorWhite = '#fff';
+
+  constructor(
+    private dialog: MatDialog,
+    private deviceService: DeviceDetectorService
+  ) {
+    this.isMobile = this.deviceService.isMobile();
+  }
+
   ngOnInit() {
-
-    // датасорс обязательно нужно создавать для таблицы, в него присваивается любой источник (БД, массивы, JSON и пр.)
-    this.dataSource = new MatTableDataSource();
-
-    this.onSelectCategory(null); // по-умолчанию показываем категорию "Все"
-
   }
 
-
-
-  // в зависимости от статуса задачи - вернуть цвет названия
-   getPriorityColor(task: Task): string {
-
-    // цвет завершенной задачи
-    if (task.completed) {
-      return '#F8F9FA'; // TODO вынести цвета в константы (magic strings, magic numbers)
-    }
-
-    if (task.priority && task.priority.color) {
-      return task.priority.color;
-    }
-
-    return '#fff'; // TODO вынести цвета в константы (magic strings, magic numbers)
-
-  }
-
-  // показывает задачи с применением всех текущий условий (категория, поиск, фильтры и пр.)
-   fillTable(): void {
-
-
+  assignTableSource() {
     if (!this.dataSource) {
       return;
     }
-
-    this.dataSource.data = this.tasks; // обновить источник данных (т.к. данные массива tasks обновились)
-
-    this.addTableObjects(); // применить постраничность и сортировку для новых данных
-
-
-    // когда получаем новые данные..
-    // чтобы можно было сортировать по столбцам "категория" и "приоритет", т.к. там не примитивные типы, а объекты
-    // @ts-ignore - показывает ошибку для типа даты, но так работает, т.к. можно возвращать любой тип
-    this.dataSource.sortingDataAccessor = (task, colName) => {
-
-      // по каким полям выполнять сортировку для каждого столбца
-      switch (colName) {
-        case 'priority': {
-          return task.priority ? task.priority.id : null;
-        }
-        case 'category': {
-          return task.category ? task.category.title : null;
-        }
-        case 'date': {
-          return task.date ? task.date : null;
-        }
-
-        case 'title': {
-          return task.title;
-        }
-      }
-    };
-
-
+    this.dataSource.data = this.tasks;
   }
 
-   addTableObjects(): void {
-    this.dataSource.sort = this.sort; // компонент для сортировки данных (если необходимо)
-    this.dataSource.paginator = this.paginator; // обновить компонент постраничности (кол-во записей, страниц)
-  }
-
-  // диалоговое редактирования для добавления задачи
-   openEditTaskDialog(task: Task): void {
-
-    // открытие диалогового окна
+  openAddDialog() {
+    const task = new Task(null, '', 0, null, this.selectedCategory);
     const dialogRef = this.dialog.open(EditTaskDialogComponent, {
-      data: [task, 'Редактирование задачи', OperType.EDIT],
-      autoFocus: false
+      data: [task, 'Добавление задачи', this.categories, this.priorities]
     });
-
     dialogRef.afterClosed().subscribe(result => {
-      // обработка результатов
-
-      if (result === 'complete') {
-        task.completed = true; // ставим статус задачи как выполненная
-        this.updateTask.emit(task);
-      }
-
-
-      if (result === 'activate') {
-        task.completed = false; // возвращаем статус задачи как невыполненная
-        this.updateTask.emit(task);
+      if (!(result)) {
         return;
       }
-
-      if (result === 'delete') {
-        this.deleteTask.emit(task);
-        return;
-      }
-
-      if (result as Task) { // если нажали ОК и есть результат
-        this.updateTask.emit(task);
-        return;
-      }
-
-    });
-  }
-
-  // диалоговое окно подтверждения удаления
-   openDeleteDialog(task: Task): void {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      maxWidth: '500px',
-      data: {
-        dialogTitle: 'Подтвердите действие',
-        message: `Вы действительно хотите удалить задачу: "${task.title}"?`
-      },
-      autoFocus: false
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) { // если нажали ОК
-        this.deleteTask.emit(task);
-      }
-    });
-  }
-
-  // изменить статус задачи
-   onToggleStatus(task: Task): void {
-    task.completed = !task.completed;
-    this.updateTask.emit(task);
-  }
-
-
-  // выбрали другую категорию
-   onSelectCategory(category: Category): void {
-    this.selectCategory.emit(category);
-  }
-
-  // фильтрация по названию
-   onFilterByTitle(): void {
-    this.filterByTitle.emit(this.searchTaskText);
-  }
-
-  // фильтрация по статусу
-   onFilterByStatus(value: boolean): void {
-
-    // на всякий случай проверяем изменилось ли значение (хотя сам UI компонент должен это делать)
-    if (value !== this.selectedStatusFilter) {
-      this.selectedStatusFilter = value;
-      this.filterByStatus.emit(this.selectedStatusFilter);
-    }
-  }
-
-
-  // фильтрация по приоритету
-   onFilterByPriority(value: Priority): void {
-
-    // на всякий случай проверяем изменилось ли значение (хотя сам UI компонент должен это делать)
-    if (value !== this.selectedPriorityFilter) {
-      this.selectedPriorityFilter = value;
-      this.filterByPriority.emit(this.selectedPriorityFilter);
-    }
-  }
-
-  // диалоговое окно для добавления задачи
-   openAddTaskDialog(): void {
-
-    // то же самое, что и при редактировании, но только передаем пустой объект Task
-    const task = new Task(null, '', false, null, this.selectedCategory);
-
-    const dialogRef = this.dialog.open(EditTaskDialogComponent, {data: [task, 'Добавление задачи', OperType.ADD]});
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) { // если нажали ОК и есть результат
+      if (result.action === DialogAction.SAVE) {
         this.addTask.emit(task);
       }
     });
-
   }
 
+  openEditDialog(task: Task): void {
+    const dialogRef = this.dialog.open(EditTaskDialogComponent, {
+      data: [task, 'Редактирование задачи', this.categories, this.priorities],
+      autoFocus: false
+    });
 
-  // в зависимости от статуса задачи - вернуть фоноввый цвет
-   getMobilePriorityBgColor(task: Task) {
+    dialogRef.afterClosed().subscribe(result => {
+      if (!(result)) {
+        return;
+      }
+      if (result.action === DialogAction.DELETE) {
+        this.deleteTask.emit(task);
+        return;
+      }
+      if (result.action === DialogAction.COMPLETE) {
+        task.completed = 1;
+        this.updateTask.emit(task);
+      }
+      if (result.action === DialogAction.ACTIVATE) {
+        task.completed = 0;
+        this.updateTask.emit(task);
+        return;
+      }
+      if (result.action === DialogAction.SAVE) {
+        this.updateTask.emit(task);
+        return;
+      }
+    });
+  }
 
+  openDeleteDialog(task: Task) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: '500px',
+      data: {dialogTitle: 'Подтвердите действие', message: `Вы действительно хотите удалить задачу: "${task.title}"?`},
+      autoFocus: false
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (!(result)) {
+        return;
+      }
+      if (result.action === DialogAction.OK) {
+        this.deleteTask.emit(task);
+      }
+    });
+  }
+
+  onToggleCompleted(task: Task) {
+    if (task.completed === 0) {
+      task.completed = 1;
+    } else {
+      task.completed = 0;
+    }
+    this.updateTask.emit(task);
+  }
+
+  getPriorityColor(task: Task) {
+    if (task.completed) {
+      return this.colorCompletedTask;
+    }
+    if (task.priority && task.priority.color) {
+      return task.priority.color;
+    }
+    return this.colorWhite;
+  }
+
+  getPriorityBgColor(task: Task) {
     if (task.priority != null && !task.completed) {
       return task.priority.color;
     }
-
     return 'none';
   }
 
+  pageChanged(pageEvent: PageEvent) {
+    this.paging.emit(pageEvent);
+  }
+
+  initSearch() {
+    this.taskSearchValues.title = this.filterTitle;
+    this.taskSearchValues.completed = this.filterCompleted;
+    this.taskSearchValues.priorityId = this.filterPriorityId;
+    this.taskSearchValues.sortColumn = this.filterSortColumn;
+    this.taskSearchValues.sortDirection = this.filterSortDirection;
+    this.searchAction.emit(this.taskSearchValues);
+    this.changed = false;
+  }
+
+  checkFilterChanged() {
+
+    this.changed = this.taskSearchValues.title !== this.filterTitle;
+    if (this.taskSearchValues.completed !== this.filterCompleted) {
+      this.changed = true;
+    }
+    if (this.taskSearchValues.priorityId !== this.filterPriorityId) {
+      this.changed = true;
+    }
+    if (this.taskSearchValues.sortColumn !== this.filterSortColumn) {
+      this.changed = true;
+    }
+    if (this.taskSearchValues.sortDirection !== this.filterSortDirection) {
+      this.changed = true;
+    }
+    return this.changed;
+  }
+
+  initSortDirectionIcon() {
+    if (this.filterSortDirection === 'desc') {
+      this.sortIconName = this.iconNameDown;
+    } else {
+      this.sortIconName = this.iconNameUp;
+    }
+  }
+
+  changedSortDirection() {
+    if (this.filterSortDirection === 'asc') {
+      this.filterSortDirection = 'desc';
+    } else {
+      this.filterSortDirection = 'asc';
+    }
+    this.initSortDirectionIcon();
+
+  }
+
+  initSearchValues() {
+    if (!this.taskSearchValues) {
+      return;
+    }
+    this.filterTitle = this.taskSearchValues.title;
+    this.filterCompleted = this.taskSearchValues.completed;
+    this.filterPriorityId = this.taskSearchValues.priorityId;
+    this.filterSortColumn = this.taskSearchValues.sortColumn;
+    this.filterSortDirection = this.taskSearchValues.sortDirection;
+  }
+
+  clearSearchValues() {
+    this.filterTitle = '';
+    this.filterCompleted = null;
+    this.filterPriorityId = null;
+    this.filterSortColumn = this.defaultSortColumn;
+    this.filterSortDirection = this.defaultSortDirection;
+  }
+
+  onToggleSearch() {
+    this.toggleSearch.emit(!this.showSearch);
+  }
 }

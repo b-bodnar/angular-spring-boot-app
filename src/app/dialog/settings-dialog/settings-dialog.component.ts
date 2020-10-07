@@ -1,56 +1,64 @@
 import {Component, OnInit} from '@angular/core';
-import {MatDialogRef} from '@angular/material/dialog';
-import {DataHandlerService} from '../../service/data-handler.service';
 import {Priority} from '../../model/Priority';
+import {MatDialogRef} from '@angular/material/dialog';
+import {DialogAction, DialogResult} from '../../object/DialogResult';
+import {PriorityService} from "../../data/dao/impl/PriorityService";
 
 @Component({
-    selector: 'app-settings-dialog',
-    templateUrl: './settings-dialog.component.html',
-    styleUrls: ['./settings-dialog.component.css']
+  selector: 'app-settings-dialog',
+  templateUrl: './settings-dialog.component.html',
+  styleUrls: ['./settings-dialog.component.css']
 })
-
-// диалоговое окно настроек приложения
-// т.к. настройки не привязаны к другим компонентам (окнам),
-// то он самостоятельно может загружать нужные данные с помощью dataHandler (а не получать их с помощью @Input)
 
 export class SettingsDialogComponent implements OnInit {
 
-     priorities: Priority[];
+  priorities: Priority[];
+  settingsChanged = false;
 
-    constructor(
-        private dialogRef: MatDialogRef<SettingsDialogComponent>, // для возможности работы с текущим диалог. окном
-        private dataHandler: DataHandlerService // ссылка на сервис для работы с данными
-    ) {
+  constructor(
+    private dialogRef: MatDialogRef<SettingsDialogComponent>,
+    private priorityService: PriorityService
+  ) {
+  }
+
+  ngOnInit() {
+    this.priorityService.findAll().subscribe(priorities => this.priorities = priorities);
+  }
+
+  close(): void {
+    if (this.settingsChanged) {
+      this.dialogRef.close(new DialogResult(DialogAction.SETTINGS_CHANGE, this.priorities));
+    } else {
+      this.dialogRef.close(new DialogResult(DialogAction.CANCEL));
     }
+  }
 
-    ngOnInit() {
-        // получаем все значения, чтобы отобразить настроку цветов
-        this.dataHandler.getAllPriorities().subscribe(priorities => this.priorities = priorities);
-    }
+  addPriority(priority: Priority): void {
+    this.settingsChanged = true;
+    this.priorityService.add(priority).subscribe(result => {
+      this.priorities.push(result);
+    });
+  }
 
-    // нажали Закрыть
-     onClose() {
+  deletePriority(priority: Priority): void {
+    this.settingsChanged = true;
+    this.priorityService.delete(priority.id).subscribe(() => {
+        this.priorities.splice(this.getPriorityIndex(priority), 1);
+      }
+    );
+  }
 
-        this.dialogRef.close(false);
+  updatePriority(priority: Priority): void {
+    this.settingsChanged = true;
+    this.priorityService.update(priority).subscribe(() => {
+        this.priorities[this.getPriorityIndex(priority)] = priority;
+      }
+    )
+    ;
+  }
 
-    }
-
-
-    // т.к. мы меняем значения в массивах, то изменения сразу отражаются на списке задач (не требуется доп. обновления)
-
-    // добавили приоритет
-     onAddPriority(priority: Priority): void {
-        this.dataHandler.addPriority(priority).subscribe();
-    }
-
-    // удалили приоритет
-     onDeletePriority(priority: Priority): void {
-        this.dataHandler.deletePriority(priority.id).subscribe();
-    }
-
-    // обновили приоритет
-     onUpdatePriority(priority: Priority): void {
-        this.dataHandler.updatePriority(priority).subscribe();
-    }
-
+  getPriorityIndex(priority: Priority): number {
+    const tmpPriority = this.priorities.find(t => t.id === priority.id);
+    return this.priorities.indexOf(tmpPriority);
+  }
 }

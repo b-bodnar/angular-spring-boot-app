@@ -8,6 +8,4 @@ export class Priority {
         this.title = title;
         this.color = color;
     }
-
-
 }
